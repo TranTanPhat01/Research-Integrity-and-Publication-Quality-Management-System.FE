@@ -32,44 +32,12 @@ export default function Home() {
       <header className="relative z-20 border-b border-[#E5DDD0] bg-[#FDFCFA]/95 backdrop-blur-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 h-[96px] flex items-center justify-between gap-4">
           {/* LEFT: Logo Block */}
-          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-            {/* Academic Seal */}
-            <div
-              className="flex-shrink-0 w-[40px] h-[40px] sm:w-[48px] sm:h-[48px] rounded-xl flex items-center justify-center shadow-sm"
-              style={{
-                background: "linear-gradient(135deg, #8B6F47 0%, #C4A57B 100%)",
-              }}
-            >
-              <span
-                className="text-white"
-                style={{
-                  fontFamily: "Cormorant Garamond, serif",
-                  fontSize: "20px",
-                  fontWeight: 700,
-                }}
-              >
-                R
-              </span>
-            </div>
-
-            {/* Vertical divider */}
-            <div className="h-[36px] sm:h-[44px] w-px bg-[#DDD5C8] flex-shrink-0" />
-
-            {/* Brand name + subtitle */}
-            <div className="flex flex-col justify-center min-w-0">
-              <span
-                className="leading-none text-2xl sm:text-3xl lg:text-[36px]"
-                style={{
-                  fontFamily: "Cormorant Garamond, serif",
-                  fontWeight: 700,
-                  color: "#1E1A17",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                RIPQMS
-              </span>
-
-            </div>
+          <div className="flex items-center flex-shrink-0">
+            <img 
+              src="/logo.png" 
+              alt="RIPQMS Logo" 
+              className="h-[80px] sm:h-[110px] w-auto object-contain scale-[1.4] origin-left" 
+            />
           </div>
 
           {/* CENTER: Navigation — updated labels */}
