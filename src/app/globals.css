@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Reset ── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #FDFCFA;
+    color: #2C1810;
+  }
+}
+
+/* ── Floating animation ── */
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-12px); }
+}
+
+/* ── Nav link hover underline animation ── */
+.nav-link {
+  position: relative;
+  transition: color 0.25s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #8B6F47;
+  transition: width 0.3s ease;
+}
+.nav-link:hover {
+  color: #8B6F47;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ── Subtle manuscript watermark background ── */
+.bg-manuscript {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='320' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='0' y='40' font-family='Cormorant Garamond, serif' font-size='18' fill='%232C1810' opacity='0.35' letter-spacing='12'%3EMANUSCRIPT%3C/text%3E%3C/svg%3E");
+  background-size: 400px 80px;
+}
+
+/* ── Architectural watermark overlay ── */
+.bg-architecture {
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='600' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232C1810' stroke-width='0.5' opacity='0.5'%3E%3C!-- Columns --%3E%3Crect x='60' y='120' width='28' height='220' rx='2'/%3E%3Crect x='120' y='120' width='28' height='220' rx='2'/%3E%3Crect x='180' y='120' width='28' height='220' rx='2'/%3E%3Crect x='240' y='120' width='28' height='220' rx='2'/%3E%3Crect x='300' y='120' width='28' height='220' rx='2'/%3E%3Crect x='360' y='120' width='28' height='220' rx='2'/%3E%3C!-- Pediment --%3E%3Cpolygon points='40,120 220,40 400,120'/%3E%3Crect x='40' y='115' width='360' height='12' rx='2'/%3E%3C!-- Base --%3E%3Crect x='40' y='340' width='360' height='12' rx='2'/%3E%3Crect x='30' y='352' width='380' height='8' rx='2'/%3E%3C!-- Dome hint --%3E%3Cellipse cx='220' cy='50' rx='60' ry='20'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 800px 540px;
+  background-position: 85% center;
+  background-repeat: no-repeat;
+}
