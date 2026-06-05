@@ -124,6 +124,21 @@
 /* ── Animated Book Hero: Parent Stage & Book ── */
 .book-stage {
   perspective: 1800px;
+  transition: transform 0.3s ease-out;
+}
+
+@media (max-width: 640px) {
+  .book-stage {
+    transform: scale(0.65);
+    transform-origin: center center;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-stage {
+    transform: scale(0.52);
+    transform-origin: center center;
+  }
 }
 
 .book {
@@ -246,7 +261,10 @@
 /* Page Back landing on the Left (Rounded Left, border Right) */
 .page-back-left {
   transform: rotateY(180deg);
-  background: #F4EBDD;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(182, 138, 90, 0.08), transparent 24%),
+    linear-gradient(270deg, rgba(44, 24, 16, 0.04), transparent 18%, rgba(255,255,255,0.22) 52%, rgba(44, 24, 16, 0.05)),
+    #F8F4EE;
   border-right: 1px solid #D8C7B3;
   border-radius: 12px 0 0 12px;
   box-shadow: inset -1px 0 3px rgba(0,0,0,0.08);
@@ -255,19 +273,18 @@
 /* Page Back landing on the Right (Rounded Right, border Left) */
 .page-back-right {
   transform: rotateY(180deg);
-  background: #F4EBDD;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(182, 138, 90, 0.08), transparent 24%),
+    linear-gradient(90deg, rgba(44, 24, 16, 0.04), transparent 18%, rgba(255,255,255,0.22) 52%, rgba(44, 24, 16, 0.05)),
+    #F8F4EE;
   border-left: 1px solid #D8C7B3;
   border-radius: 0 12px 12px 0;
   box-shadow: inset 1px 0 3px rgba(0,0,0,0.08);
 }
 
-.page-back-paper {
+.page-back-content {
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(circle at 24% 18%, rgba(182, 138, 90, 0.08), transparent 24%),
-    linear-gradient(90deg, rgba(44, 24, 16, 0.04), transparent 18%, rgba(255,255,255,0.22) 52%, rgba(44, 24, 16, 0.05)),
-    #F4EBDD;
 }
 
 /* ── Moving Page Shadow (React State Controlled ::after) ── */

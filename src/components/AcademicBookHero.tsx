@@ -152,6 +152,16 @@ export default function AcademicBookHero() {
   const leftIndex = spreadIndex * 2;
   const rightIndex = spreadIndex * 2 + 1;
 
+  // Compute what the NEXT spread will look like (for back faces)
+  const nextSpreadForward = Math.min(spreadIndex + 1, lastSpreadIndex);
+  const nextSpreadBackward = Math.max(spreadIndex - 1, 0);
+  // Forward flip: right page flips → back shows next-spread LEFT page
+  // Backward flip: left page flips → back shows prev-spread RIGHT page
+  const backFacePageIndex =
+    direction === "forward"
+      ? nextSpreadForward * 2       // next left page
+      : nextSpreadBackward * 2 + 1; // prev right page
+
   // Floating particles definitions
   const particles = [
     { text: '“', x: -60, y: -80, size: 28 },
@@ -165,11 +175,11 @@ export default function AcademicBookHero() {
   ];
 
   // Dynamic animation speeds depending on hover
-  const flipDuration = shouldReduceMotion ? 0 : (isHovered ? 1.0 : 1.8);
-  const pauseDuration = shouldReduceMotion ? 100 : (isHovered ? 800 : 1500);
+  const flipDuration = shouldReduceMotion ? 0 : 2.5;
+  const pauseDuration = shouldReduceMotion ? 100 : 10000;
 
   useEffect(() => {
-    if (shouldReduceMotion || isFlipping || flippingIndex !== null) return;
+    if (shouldReduceMotion || isHovered || isFlipping || flippingIndex !== null) return;
 
     let timer: NodeJS.Timeout;
 
@@ -185,7 +195,7 @@ export default function AcademicBookHero() {
     }, pauseDuration);
 
     return () => clearTimeout(timer);
-  }, [isFlipping, flippingIndex, pauseDuration, shouldReduceMotion, direction, rightIndex, leftIndex]);
+  }, [isFlipping, flippingIndex, pauseDuration, shouldReduceMotion, isHovered, direction, rightIndex, leftIndex]);
 
   const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     // Ensure we only process the transform transition on the main flipping page element
@@ -262,7 +272,7 @@ export default function AcademicBookHero() {
 
   return (
     <div 
-      className="relative flex flex-col items-center justify-center w-[580px] h-[460px] select-none"
+      className="relative flex flex-col items-center justify-center w-full max-w-[580px] h-[280px] sm:h-[460px] select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -405,14 +415,16 @@ export default function AcademicBookHero() {
               style={{ "--flip-duration": `${flipDuration}s` } as React.CSSProperties}
             >
               <div className="page-bend">
-                {/* FRONT SIDE */}
+                {/* FRONT SIDE — current page being turned */}
                 <div className={`page-front ${direction === "forward" ? "page-front-right" : "page-front-left"}`}>
                   {renderPageContent(SAFE_PAGES[flippingIndex])}
                 </div>
 
-                {/* BACK SIDE */}
+                {/* BACK SIDE — next spread page revealed after turn */}
                 <div className={`page-back ${direction === "forward" ? "page-back-left" : "page-back-right"}`}>
-                  <div className="page-back-paper" aria-hidden="true" />
+                  <div className="page-back-content">
+                    {renderPageContent(SAFE_PAGES[backFacePageIndex])}
+                  </div>
                 </div>
               </div>
             </div>

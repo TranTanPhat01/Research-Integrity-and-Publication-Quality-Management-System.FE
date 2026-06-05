@@ -1,10 +1,11 @@
+"use client";
+
+import { useState } from 'react';
 import './login.css';
 
-export const metadata = {
-  title: 'RIPQMS – Sign In',
-};
-
 export default function LoginPage() {
+  const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
+
   return (
     <>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
@@ -40,27 +41,63 @@ export default function LoginPage() {
 
           <div className="right">
             <div className="tabs">
-              <div className="tab active">Sign In</div>
-              <div className="tab">Register</div>
-            </div>
-
-            <p className="welcome-title">Welcome back</p>
-            <p className="welcome-sub">Continue your research journey</p>
-
-            <div className="field-group">
-              <label className="field-label">Email</label>
-              <input className="field-input" type="email" placeholder="you@email.com" />
-            </div>
-
-            <div className="field-group">
-              <label className="field-label">Password</label>
-              <input className="field-input" type="password" placeholder="Enter your password..." />
-              <div className="field-footer">
-                <button className="forgot">Forgot password?</button>
+              <div 
+                className={`tab ${activeTab === 'signin' ? 'active' : ''}`} 
+                onClick={() => setActiveTab('signin')}
+              >
+                Sign In
+              </div>
+              <div 
+                className={`tab ${activeTab === 'register' ? 'active' : ''}`} 
+                onClick={() => setActiveTab('register')}
+              >
+                Register
               </div>
             </div>
 
-            <button className="btn-login">Sign In</button>
+            {activeTab === 'signin' ? (
+              <div className="form-content fade-in">
+                <p className="welcome-title">Welcome back</p>
+                <p className="welcome-sub">Continue your research journey</p>
+
+                <div className="field-group">
+                  <label className="field-label">Email</label>
+                  <input className="field-input" type="email" placeholder="you@email.com" />
+                </div>
+
+                <div className="field-group">
+                  <label className="field-label">Password</label>
+                  <input className="field-input" type="password" placeholder="Enter your password..." />
+                  <div className="field-footer">
+                    <button className="forgot">Forgot password?</button>
+                  </div>
+                </div>
+
+                <button className="btn-login">Sign In</button>
+              </div>
+            ) : (
+              <div className="form-content fade-in">
+                <p className="welcome-title">Create an account</p>
+                <p className="welcome-sub">Join the research governance platform</p>
+
+                <div className="field-group">
+                  <label className="field-label">Full Name</label>
+                  <input className="field-input" type="text" placeholder="Dr. John Doe" />
+                </div>
+
+                <div className="field-group">
+                  <label className="field-label">Institution Email</label>
+                  <input className="field-input" type="email" placeholder="you@university.edu" />
+                </div>
+
+                <div className="field-group">
+                  <label className="field-label">Password</label>
+                  <input className="field-input" type="password" placeholder="Create a password..." />
+                </div>
+
+                <button className="btn-login">Register</button>
+              </div>
+            )}
 
             <div className="or-divider">OR</div>
 

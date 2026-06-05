@@ -30,12 +30,12 @@ export default function Home() {
           HEADER — 96px, institutional identity
           ════════════════════════════════════════════════ */}
       <header className="relative z-20 border-b border-[#E5DDD0] bg-[#FDFCFA]/95 backdrop-blur-sm">
-        <div className="max-w-[1440px] mx-auto px-8 h-[96px] flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 h-[96px] flex items-center justify-between gap-4">
           {/* LEFT: Logo Block */}
-          <div className="flex items-center gap-4" style={{ width: "360px" }}>
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
             {/* Academic Seal */}
             <div
-              className="flex-shrink-0 w-[48px] h-[48px] rounded-xl flex items-center justify-center shadow-sm"
+              className="flex-shrink-0 w-[40px] h-[40px] sm:w-[48px] sm:h-[48px] rounded-xl flex items-center justify-center shadow-sm"
               style={{
                 background: "linear-gradient(135deg, #8B6F47 0%, #C4A57B 100%)",
               }}
@@ -44,7 +44,7 @@ export default function Home() {
                 className="text-white"
                 style={{
                   fontFamily: "Cormorant Garamond, serif",
-                  fontSize: "22px",
+                  fontSize: "20px",
                   fontWeight: 700,
                 }}
               >
@@ -53,15 +53,14 @@ export default function Home() {
             </div>
 
             {/* Vertical divider */}
-            <div className="h-[44px] w-px bg-[#DDD5C8] flex-shrink-0" />
+            <div className="h-[36px] sm:h-[44px] w-px bg-[#DDD5C8] flex-shrink-0" />
 
             {/* Brand name + subtitle */}
             <div className="flex flex-col justify-center min-w-0">
               <span
-                className="leading-none"
+                className="leading-none text-2xl sm:text-3xl lg:text-[36px]"
                 style={{
                   fontFamily: "Cormorant Garamond, serif",
-                  fontSize: "36px",
                   fontWeight: 700,
                   color: "#1E1A17",
                   letterSpacing: "-0.01em",
@@ -74,11 +73,11 @@ export default function Home() {
           </div>
 
           {/* CENTER: Navigation — updated labels */}
-          <nav className="flex items-center" style={{ gap: "48px" }}>
+          <nav className="hidden md:flex items-center gap-6 lg:gap-12">
             {[
-              { label: "Integrity Audit", href: "#integrity" },
-              { label: "Quality Review", href: "#quality" },
-              { label: "Workflow", href: "#workflow" },
+              { label: "Integrity", href: "#integrity" },
+              { label: "Quality", href: "#quality" },
+              { label: "Governance", href: "#workflow" },
               { label: "Resources", href: "#resources" },
             ].map((item) => (
               <a
@@ -101,11 +100,11 @@ export default function Home() {
           {/* RIGHT: Sign In Button */}
           <Link
             href="/login"
-            className="flex items-center justify-center rounded-[10px] transition-all duration-200 hover:bg-[#222] hover:shadow-lg"
+            className="flex items-center justify-center rounded-[10px] transition-all duration-200 hover:bg-[#3d2518] hover:shadow-lg"
             style={{
               width: "140px",
               height: "52px",
-              background: "#111111",
+              background: "#2C1810",
               color: "#ffffff",
               fontFamily: "Inter, sans-serif",
               fontSize: "16px",
@@ -134,10 +133,9 @@ export default function Home() {
 
               {/* Headline — 64px, line-height 1.05, max 700px */}
               <h1
-                className="mb-5"
+                className="mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-[64px]"
                 style={{
                   fontFamily: "Cormorant Garamond, serif",
-                  fontSize: "64px",
                   fontWeight: 500,
                   lineHeight: 1.05,
                   maxWidth: "700px",
@@ -153,10 +151,9 @@ export default function Home() {
 
               {/* Description — 22px, #5A5148 */}
               <p
-                className="mb-6"
+                className="mb-6 text-base sm:text-lg md:text-xl lg:text-[22px]"
                 style={{
                   fontFamily: "Inter, sans-serif",
-                  fontSize: "22px",
                   fontWeight: 400,
                   lineHeight: 1.8,
                   maxWidth: "560px",
