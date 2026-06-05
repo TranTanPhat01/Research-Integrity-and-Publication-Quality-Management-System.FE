@@ -1,1 +1,0 @@
-# Research-Integrity-and-Publication-Quality-Management-System.FE
