@@ -11,6 +11,7 @@ import {
   GitBranch,
   History,
 } from "lucide-react";
+import AcademicBookHero from "../components/AcademicBookHero";
 
 export default function Home() {
   return (
@@ -216,53 +217,7 @@ export default function Home() {
 
             {/* RIGHT: Illustration Column */}
             <div className="col-span-12 lg:col-span-6 flex items-center justify-center relative">
-              <div className="relative w-full max-w-[560px]">
-                <div className="bg-[#F8F4EE] rounded-[24px] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/image.png"
-                    alt="Research Integrity Book"
-                    className="w-full h-auto transform scale-110"
-                  />
-                </div>
-
-                {/* Floating: Academic Integrity Seal (KEEP) */}
-                <div
-                  className="absolute -top-8 -right-8 bg-white rounded-2xl shadow-lg p-4 animate-float"
-                  style={{ animationDelay: "0s" }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#8B6F47] to-[#C4A57B] rounded-full flex items-center justify-center">
-                      <Shield className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-[#2C1810]">
-                        Academic
-                      </div>
-                      <div className="text-xs text-[#6B5744]">
-                        Integrity Seal
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating: COPE Compliant (KEEP) */}
-                <div
-                  className="absolute top-1/4 -left-12 bg-white rounded-2xl shadow-lg p-4 animate-float"
-                  style={{ animationDelay: "1s" }}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Award className="w-8 h-8 text-[#8B6F47]" />
-                    <div className="text-xs font-semibold text-[#2C1810]">
-                      COPE
-                    </div>
-                    <div className="text-xs text-[#6B5744]">Compliant</div>
-                  </div>
-                </div>
-
-                {/* REMOVED: Quality Score 98 */}
-                {/* REMOVED: Citations Verified */}
-              </div>
+              <AcademicBookHero />
             </div>
           </div>
         </div>
