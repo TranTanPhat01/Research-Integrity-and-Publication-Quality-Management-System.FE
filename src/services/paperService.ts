@@ -1,6 +1,10 @@
 import { api } from "@/lib/api";
 import type { BaseResponse } from "@/types/api";
-import type { PaperVersionResponse, UploadPaperRequest } from "@/models/paper";
+import type {
+  PaperProcessingProgressResponse,
+  PaperVersionResponse,
+  UploadPaperRequest,
+} from "@/models/paper";
 import { ApiEndpoints } from "@/constants/api-endpoints";
 
 export const paperService = {
@@ -14,6 +18,10 @@ export const paperService = {
       form,
     ) as Promise<BaseResponse<PaperVersionResponse>>;
   },
+  getProcessingProgress: (paperId: number | string) =>
+    api.get<PaperProcessingProgressResponse>(
+      ApiEndpoints.Papers.ProcessingProgress(paperId),
+    ) as Promise<BaseResponse<PaperProcessingProgressResponse>>,
 };
 
 export default paperService;

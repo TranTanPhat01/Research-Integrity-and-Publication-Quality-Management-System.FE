@@ -1,3 +1,6 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -10,11 +13,16 @@ import type {
   PaperProcessingProgressResponse,
   PaperProcessingProgressStepResponse,
 } from "@/models/paper";
+import { paperService } from "@/services/paperService";
 
-type RecentAssessmentsProps = {
-  progress?: PaperProcessingProgressResponse | null;
-  isLoading?: boolean;
-  error?: string | null;
+type PaperProcessingTimelineProps = {
+  paperId: number | null;
+  uploadError?: string | null;
+};
+
+type ApiError = Error & {
+  status?: number;
+  code?: number;
 };
 
 function formatStage(stage: string) {
@@ -51,6 +59,12 @@ function getStatusColor(status: string) {
   if (normalized === "SKIPPED") return "var(--theme-text-muted)";
 
   return "var(--theme-text-light)";
+}
+
+function isTrackerCreatingError(error: unknown) {
+  const apiError = error as ApiError;
+
+  return apiError?.status === 404 || apiError?.code === 404;
 }
 
 function StepIcon({ step }: { step: PaperProcessingProgressStepResponse }) {
@@ -144,12 +158,75 @@ function TimelineStep({
   );
 }
 
-export default function RecentAssessments({
-  progress,
-  isLoading = false,
-  error,
-}: RecentAssessmentsProps) {
+export default function PaperProcessingTimeline({
+  paperId,
+  uploadError,
+}: PaperProcessingTimelineProps) {
+  const [progress, setProgress] =
+    useState<PaperProcessingProgressResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isTrackerCreating, setIsTrackerCreating] = useState(false);
   const steps = progress?.steps ?? [];
+
+  const loadProgress = useCallback(
+    async (showLoading = false) => {
+      if (!paperId) return;
+
+      try {
+        if (showLoading) setIsLoading(true);
+
+        const response = await paperService.getProcessingProgress(paperId);
+        if (!response.data) {
+          throw new Error("Processing progress was not returned by the API.");
+        }
+
+        setProgress(response.data);
+        setError(null);
+        setIsTrackerCreating(false);
+      } catch (loadError) {
+        if (isTrackerCreatingError(loadError)) {
+          setProgress(null);
+          setError(null);
+          setIsTrackerCreating(true);
+          return;
+        }
+
+        const message =
+          loadError instanceof Error
+            ? loadError.message
+            : "Processing progress could not be loaded.";
+        setError(message);
+        setIsTrackerCreating(false);
+      } finally {
+        if (showLoading) setIsLoading(false);
+      }
+    },
+    [paperId],
+  );
+
+  useEffect(() => {
+    setProgress(null);
+    setError(null);
+    setIsTrackerCreating(false);
+
+    if (!paperId) return;
+
+    void loadProgress(true);
+  }, [paperId, loadProgress]);
+
+  useEffect(() => {
+    if (!paperId) return;
+    if (!isTrackerCreating && progress?.overallStatus?.toUpperCase() !== "PROCESSING") {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      void loadProgress();
+    }, 3000);
+
+    return () => window.clearInterval(intervalId);
+  }, [paperId, progress?.overallStatus, isTrackerCreating, loadProgress]);
 
   return (
     <div className="bg-theme-bg-card rounded-xl border border-theme-border-main p-5">
@@ -175,13 +252,18 @@ export default function RecentAssessments({
           <Loader2 size={16} className="animate-spin" />
           Loading processing timeline...
         </div>
-      ) : error ? (
+      ) : isTrackerCreating ? (
+        <div className="flex items-center gap-2 text-sm text-theme-text-light py-8">
+          <Loader2 size={16} className="animate-spin" />
+          Processing tracker is being created...
+        </div>
+      ) : error || uploadError ? (
         <div className="rounded-lg border border-theme-border-light p-3">
           <p className="text-sm font-semibold" style={{ color: "#B42318" }}>
             Progress unavailable
           </p>
           <p className="text-[11px] text-theme-text-light leading-relaxed mt-1">
-            {error}
+            {error ?? uploadError}
           </p>
         </div>
       ) : progress ? (
@@ -228,6 +310,11 @@ export default function RecentAssessments({
               No processing steps were returned by the API.
             </p>
           )}
+        </div>
+      ) : paperId ? (
+        <div className="flex items-center gap-2 text-sm text-theme-text-light py-8">
+          <Loader2 size={16} className="animate-spin" />
+          Loading processing timeline...
         </div>
       ) : (
         <p className="text-sm text-theme-text-light leading-relaxed py-6">
