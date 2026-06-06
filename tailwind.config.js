@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -37,6 +38,30 @@ module.exports = {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        theme: {
+          bg: {
+            main: "var(--theme-bg-main)",
+            body: "var(--theme-bg-body)",
+            card: "var(--theme-bg-card)",
+            hover: "var(--theme-bg-hover)",
+          },
+          border: {
+            main: "var(--theme-border-main)",
+            secondary: "var(--theme-border-secondary)",
+            light: "var(--theme-border-light)",
+          },
+          text: {
+            primary: "var(--theme-text-primary)",
+            secondary: "var(--theme-text-secondary)",
+            muted: "var(--theme-text-muted)",
+            light: "var(--theme-text-light)",
+          },
+          accent: {
+            main: "var(--theme-accent-main)",
+            secondary: "var(--theme-accent-secondary)",
+            upload: "var(--theme-accent-upload)",
+          }
+        }
       },
     },
   },

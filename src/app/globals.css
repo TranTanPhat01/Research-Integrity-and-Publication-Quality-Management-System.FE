@@ -2,8 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Reset ── */
 @layer base {
+  :root {
+    --theme-bg-main: #F8F4EE;
+    --theme-bg-body: #FDFCFA;
+    --theme-bg-card: #FFFFFF;
+    --theme-bg-hover: #FDF8EE;
+    --theme-border-main: #E5DDD0;
+    --theme-border-secondary: #D8C7B3;
+    --theme-border-light: #F0E8DD;
+    
+    --theme-text-primary: #1B2B4B;
+    --theme-text-secondary: #2C1810;
+    --theme-text-muted: #5A5148;
+    --theme-text-light: #8B7355;
+    
+    --theme-accent-main: #8B6914;
+    --theme-accent-secondary: #C49A2A;
+    --theme-accent-upload: #B8860B;
+  }
+
+  .dark {
+    --theme-bg-main: #121212;
+    --theme-bg-body: #0a0a0a;
+    --theme-bg-card: #1E1E1E;
+    --theme-bg-hover: #2C2C2C;
+    --theme-border-main: #333333;
+    --theme-border-secondary: #444444;
+    --theme-border-light: #2A2A2A;
+    
+    --theme-text-primary: #E0E0E0;
+    --theme-text-secondary: #CCCCCC;
+    --theme-text-muted: #A0A0A0;
+    --theme-text-light: #888888;
+    
+    --theme-accent-main: #D4AF37;
+    --theme-accent-secondary: #FFD700;
+    --theme-accent-upload: #DAA520;
+  }
+
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -16,8 +53,8 @@
   }
   body {
     font-family: 'Inter', sans-serif;
-    background: #FDFCFA;
-    color: #2C1810;
+    background: var(--theme-bg-body);
+    color: var(--theme-text-secondary);
   }
 }
 
