@@ -18,74 +18,61 @@ import {
   BookOpen,
   GitBranch,
   AlertTriangle,
-  Star,
   ChevronRight,
-  HelpCircle as HelpIcon,
-  User,
-  Check,
   Clock,
   RefreshCw,
   Search,
   Info,
   Megaphone,
+  BarChart3,
+  ArrowRight,
+  Target,
+  Users,
+  Brain,
+  FileCheck,
+  ChevronDown,
 } from "lucide-react";
 
-// ── types ──────────────────────────────────────────────────────────────────
-interface NavItem {
-  icon: React.ElementType;
-  label: string;
-  active?: boolean;
-  badge?: number;
-}
-
 // ── data ───────────────────────────────────────────────────────────────────
-const NAV_ITEMS: NavItem[] = [
-  { icon: Home, label: "Home", active: true },
+const NAV_ITEMS = [
+  { icon: Home, label: "Home" },
   { icon: FileText, label: "My Papers" },
   { icon: ClipboardList, label: "Assessments" },
   { icon: Eye, label: "Reviews" },
   { icon: CheckSquare, label: "Approvals" },
+  { icon: BarChart3, label: "Reports" },
   { icon: Package, label: "Submission Packages" },
-  { icon: Bell, label: "Notifications", badge: 3 },
+  { icon: Bell, label: "Notifications", badge: 2 },
   { icon: HelpCircle, label: "Help & Support" },
 ];
 
 const STATS = [
-  { value: "12", label: "My Papers", color: "#8B6914", bg: "#FDF8EE" },
-  { value: "5", label: "In Review", color: "#1565C0", bg: "#EEF4FD" },
-  { value: "1", label: "Awaiting Approval", color: "#E65100", bg: "#FFF3E0" },
-  { value: "3", label: "Completed", color: "#2E7D32", bg: "#EDF7EE", icon: "check" },
-  { value: "7", label: "Total Submitted", color: "#6A1B9A", bg: "#F5EEF8" },
+  { value: 12, label: "My Papers", icon: FileText },
+  { value: 5, label: "In Review", icon: Eye },
+  { value: 3, label: "Awaiting Approval", icon: CheckSquare },
+  { value: 7, label: "Completed", icon: ClipboardList },
 ];
 
 const AI_FEATURES = [
   {
     icon: ShieldCheck,
     title: "Integrity Audit",
-    desc: "Automated plagiarism and data fabrication detection across your manuscript.",
-    color: "#8B6914",
-    bg: "#FDF8EE",
+    desc: "Check COPE, ethics, COI, citation, transparency and more.",
   },
   {
-    icon: Star,
+    icon: BookOpen,
     title: "Publication Quality Assessment",
-    desc: "Evaluate writing clarity, methodological rigor, and citation completeness.",
-    color: "#1565C0",
-    bg: "#EEF4FD",
+    desc: "Evaluate structure, methodology, writing, references, and readiness.",
   },
   {
-    icon: GitBranch,
-    title: "Research Consistency Workflow",
-    desc: "Cross-check claims, figures, and conclusions for internal consistency.",
-    color: "#2E7D32",
-    bg: "#EDF7EE",
+    icon: Users,
+    title: "Research Governance Workflow",
+    desc: "Internal review, approval, audit trail and final submission package.",
   },
   {
-    icon: AlertTriangle,
-    title: "Better Preventable Digressions",
-    desc: "Flag off-topic sections and structural deviations before submission.",
-    color: "#E65100",
-    bg: "#FFF3E0",
+    icon: Target,
+    title: "Reduce Preventable Rejections",
+    desc: "Identify issues early and improve your chance of success.",
   },
 ];
 
@@ -93,379 +80,336 @@ const RECENT_ASSESSMENTS = [
   {
     title: "Deep Learning for Medical Image...",
     status: "In Review",
-    statusColor: "#1565C0",
-    statusBg: "#EEF4FD",
-    score: 82,
-    date: "12 May 2025",
+    statusColor: "#C49A2A",
+    score: 72,
+    scoreColor: "#C49A2A",
+    date: "Updated 2 hours ago",
   },
   {
-    title: "Telehealth AI in Healthcare",
-    status: "Approved",
+    title: "Explainable AI in Healthcare",
+    status: "Approved by Reviewer",
     statusColor: "#2E7D32",
-    statusBg: "#EDF7EE",
-    score: 91,
-    date: "08 May 2025",
-    note: "Approved by Reviewer",
+    score: 85,
+    scoreColor: "#2E7D32",
+    date: "Updated 1 day ago",
   },
   {
-    title: "Improving Federated Learning for AI Security",
-    status: "Pending",
-    statusColor: "#E65100",
-    statusBg: "#FFF3E0",
-    score: 74,
-    date: "03 May 2025",
+    title: "Federated Learning for IoT Security",
+    status: "Awaiting Lab Approval",
+    statusColor: "#1565C0",
+    score: 68,
+    scoreColor: "#1565C0",
+    date: "Updated 2 days ago",
   },
 ];
 
 const ANNOUNCEMENTS = [
   {
-    icon: Megaphone,
-    title: "New Policy Update",
-    desc: "RIPQMS updated its ethical review standards for clinical study submissions. Effective 01 Jun 2025.",
-    date: "28 May 2025",
-    type: "policy",
+    icon: Info,
+    title: "New Integrity Policy Updated",
+    desc: "COPE guidelines 2023 has been added to the system.",
+    date: "May 15, 2024",
   },
   {
-    icon: Info,
-    title: "System Announcement",
-    desc: "Scheduled maintenance on 15 Jun 2025 from 02:00–04:00 UTC. Services will be temporarily unavailable.",
-    date: "25 May 2025",
-    type: "system",
+    icon: Megaphone,
+    title: "Maintenance Notice",
+    desc: "System will be under maintenance on May 20, 2024 from 01:00 to 03:00 AM (UTC+7).",
+    date: "May 10, 2024",
   },
 ];
 
 const HOW_IT_WORKS = [
-  {
-    step: "01",
-    icon: CloudUpload,
-    title: "Upload Manuscript",
-    desc: "Submit your document in PDF, DOCX, or LaTeX format.",
-  },
-  {
-    step: "02",
-    icon: Search,
-    title: "System Analysis",
-    desc: "AI engines run integrity, quality, and consistency checks.",
-  },
-  {
-    step: "03",
-    icon: FileText,
-    title: "Get Report",
-    desc: "Receive a detailed assessment report with scores and flags.",
-  },
-  {
-    step: "04",
-    icon: RefreshCw,
-    title: "Review & Revise",
-    desc: "Revise your manuscript based on actionable recommendations.",
-  },
-  {
-    step: "05",
-    icon: Package,
-    title: "Approval & Package",
-    desc: "Submit the final package for editorial approval and archiving.",
-  },
+  { icon: CloudUpload, title: "Upload Manuscript", desc: "Upload your file in PDF or DOCX format." },
+  { icon: Brain, title: "System Analysis", desc: "AI and rules engine analyze integrity and quality." },
+  { icon: FileCheck, title: "Get Report", desc: "Receive integrity report, quality score and risk level." },
+  { icon: RefreshCw, title: "Review & Revise", desc: "Address findings and improve your manuscript." },
+  { icon: Package, title: "Approval & Package", desc: "Get approved and generate submission package." },
 ];
 
+function CircleScore({ score, color }: { score: number; color: string }) {
+  const r = 20;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (score / 100) * circ;
+  return (
+    <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+      <svg width="48" height="48" className="absolute inset-0 -rotate-90">
+        <circle cx="24" cy="24" r={r} fill="none" stroke="#E5DDD0" strokeWidth="4" />
+        <circle
+          cx="24" cy="24" r={r} fill="none"
+          stroke={color} strokeWidth="4"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="text-xs font-bold relative z-10" style={{ color }}>{score}</span>
+    </div>
+  );
+}
+
 // ── component ──────────────────────────────────────────────────────────────
-export default function App() {
+export default function HomePage() {
   const [collapsed, setCollapsed] = useState(false);
   const [activeNav, setActiveNav] = useState("Home");
   const [dragOver, setDragOver] = useState(false);
 
   return (
-    <div
-      className="flex h-screen bg-background overflow-hidden"
-      style={{ fontFamily: "'DM Sans', sans-serif" }}
-    >
-      {/* ── SIDEBAR ─────────────────────────────────────────── */}
-      <aside
-        className={`flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 shrink-0 ${
-          collapsed ? "w-16" : "w-56"
-        }`}
-      >
+    <div className="flex flex-col h-screen overflow-hidden bg-[#F8F4EE]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+
+      {/* ── TOP HEADER ─────────────────────────────────────────────── */}
+      <header className="h-20 bg-white border-b border-[#E5DDD0] flex items-center px-6 gap-4 shrink-0 z-30 py-0">
         {/* Logo */}
-        <div className={`flex items-center px-4 py-4 border-b border-sidebar-border overflow-hidden h-20 ${collapsed ? "justify-center" : ""}`}>
-          <img 
-            src="/logo.png" 
-            alt="RIPQMS Logo" 
-            className={`h-[60px] w-auto object-contain origin-left transition-transform ${collapsed ? "scale-[1.3] -ml-2" : "scale-[2.1] -ml-2"}`}
-          />
+        <div className="flex items-center gap-3 shrink-0" style={{ width: collapsed ? "64px" : "208px", transition: "width 0.3s" }}>
+          <img src="/logo.png" alt="RIPQMS Logo" className="h-full w-auto object-contain" />
         </div>
 
-        {/* Nav items */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => setActiveNav(item.label)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left group ${
-                activeNav === item.label
-                  ? "bg-sidebar-accent text-sidebar-primary font-semibold"
-                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-              } ${collapsed ? "justify-center" : ""}`}
-            >
-              <item.icon
-                size={16}
-                className={`shrink-0 ${activeNav === item.label ? "text-accent" : ""}`}
-              />
-              {!collapsed && (
-                <span className="text-sm flex-1 truncate">{item.label}</span>
-              )}
-              {!collapsed && item.badge && (
-                <span className="text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-4 h-4 flex items-center justify-center shrink-0">
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          ))}
-        </nav>
-
-        {/* Collapse button */}
-        <div className="p-2 border-t border-sidebar-border">
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground/50 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-all ${
-              collapsed ? "justify-center" : ""
-            }`}
-          >
-            <ChevronLeft
-              size={16}
-              className={`shrink-0 transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`}
+        {/* Search Bar */}
+        <div className="flex-1 px-8">
+          <div className="relative max-w-md w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B7355]" size={16} />
+            <input
+              type="text"
+              placeholder="Search papers, assessments, users..."
+              className="w-full pl-9 pr-4 py-2 bg-[#F8F4EE] border border-[#E5DDD0] rounded-lg text-sm text-[#1B2B4B] placeholder-[#8B7355] focus:outline-none focus:border-[#C49A2A] focus:ring-1 focus:ring-[#C49A2A] transition-all"
             />
-            {!collapsed && <span className="text-sm">Collapse</span>}
-          </button>
+          </div>
         </div>
-      </aside>
 
-      {/* ── MAIN ────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top bar */}
-        <header className="h-14 bg-card border-b border-border flex items-center px-6 gap-4 shrink-0">
-          <div className="flex-1" />
-          <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <HelpIcon size={14} />
+        {/* Right side */}
+        <div className="flex items-center gap-5">
+          <button className="flex items-center gap-2 text-sm text-[#5A5148] hover:text-[#2C1810] transition-colors">
+            <HelpCircle size={16} />
             Help & Guide
           </button>
-          <div className="w-px h-5 bg-border" />
-          <button className="flex items-center gap-2.5 group">
+
+          <button className="relative">
+            <Bell size={20} className="text-[#5A5148]" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C49A2A] text-white text-[9px] font-bold rounded-full flex items-center justify-center">2</span>
+          </button>
+
+          <div className="w-px h-6 bg-[#E5DDD0]" />
+
+          <button className="flex items-center gap-3 group">
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
+              className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E5DDD0] flex items-center justify-center text-white font-bold text-sm shrink-0"
               style={{ background: "linear-gradient(135deg, #8B6914, #C49A2A)" }}
             >
               N
             </div>
             <div className="text-left hidden md:block">
-              <p className="text-sm font-semibold text-foreground leading-none">
-                Nguyen Van A
-              </p>
-              <p className="text-[11px] text-muted-foreground mt-0.5 leading-none">
-                Reviewer · Author
-              </p>
+              <p className="text-sm font-semibold text-[#2C1810] leading-none">Nguyen Van A</p>
+              <p className="text-[11px] text-[#8B7355] mt-0.5 leading-none">Researcher / Writer</p>
             </div>
+            <ChevronDown size={14} className="text-[#8B7355]" />
           </button>
-        </header>
+        </div>
+      </header>
 
-        {/* Scrollable content */}
+      {/* ── BODY (sidebar + main) ───────────────────────────────────── */}
+      <div className="flex flex-1 overflow-hidden">
+
+        {/* ── SIDEBAR ─────────────────────────────────────────────── */}
+        <aside
+          className="flex flex-col shrink-0 transition-all duration-300 border-r border-[#E5DDD0]"
+          style={{
+            width: collapsed ? "64px" : "208px",
+            background: "#FFFFFF",
+          }}
+        >
+          <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => setActiveNav(item.label)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left ${
+                  activeNav === item.label
+                    ? "font-semibold"
+                    : "text-[#5A5148] hover:text-[#1B2B4B] hover:bg-[#F8F4EE]"
+                } ${collapsed ? "justify-center" : ""}`}
+                style={
+                  activeNav === item.label
+                    ? { background: "#FDF8EE", color: "#8B6914" }
+                    : {}
+                }
+              >
+                <item.icon size={17} className="shrink-0" />
+                {!collapsed && (
+                  <span className="text-sm flex-1 truncate">{item.label}</span>
+                )}
+                {!collapsed && item.badge && (
+                  <span className="text-[10px] font-bold bg-[#C49A2A] text-white rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </nav>
+
+          {/* Collapse */}
+          <div className="p-2 border-t border-[#E5DDD0]">
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5A5148] hover:bg-[#F8F4EE] hover:text-[#1B2B4B] transition-all ${collapsed ? "justify-center" : ""}`}
+            >
+              <ChevronLeft
+                size={16}
+                className={`shrink-0 transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`}
+              />
+              {!collapsed && <span className="text-sm">Collapse</span>}
+            </button>
+          </div>
+        </aside>
+
+        {/* ── MAIN ──────────────────────────────────────────────────── */}
         <main className="flex-1 overflow-y-auto">
-          {/* ── BANNER ──────────────────────────────────────── */}
-          <div className="w-full overflow-hidden" style={{ maxHeight: "180px" }}>
+
+          {/* ── BANNER SECTION ──────────────────────────────────────── */}
+          <div
+            className="relative overflow-hidden"
+            style={{ height: "180px" }}
+          >
             <img
               src="/banner.png"
-              alt="Welcome Banner"
-              className="w-full object-cover object-center"
-              style={{ maxHeight: "180px" }}
+              alt="Banner"
+              className="w-full h-full object-cover"
+              style={{ display: "block" }}
             />
           </div>
 
-          {/* ── BODY ────────────────────────────────────────── */}
+          {/* ── BODY ───────────────────────────────────────────────── */}
           <div className="px-6 py-5 space-y-5">
-            {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+
+            {/* Stats row — 4 cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {STATS.map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-xl border border-border bg-card px-4 py-3 flex items-center gap-3 hover:shadow-sm transition-shadow"
+                  className="bg-white rounded-xl border border-[#E5DDD0] px-5 py-4 hover:shadow-md transition-shadow"
                 >
-                  <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-lg font-bold"
-                    style={{ background: s.bg, color: s.color }}
-                  >
-                    {s.icon === "check" ? (
-                      <Check size={16} style={{ color: s.color }} />
-                    ) : (
-                      <span
-                        className="text-lg font-extrabold"
-                        style={{ fontFamily: "'Playfair Display', serif", color: s.color }}
-                      >
-                        {s.value}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <p
-                      className="text-base font-bold leading-none"
-                      style={{ color: s.color, fontFamily: "'Playfair Display', serif" }}
-                    >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "#FDF8EE" }}>
+                      <s.icon size={16} style={{ color: "#8B6914" }} />
+                    </div>
+                    <span className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif", color: "#1B2B4B" }}>
                       {s.value}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                      {s.label}
-                    </p>
+                    </span>
                   </div>
+                  <p className="text-xs text-[#8B7355] font-medium mb-2">{s.label}</p>
+                  <button className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#8B6914" }}>
+                    View all <ArrowRight size={11} />
+                  </button>
                 </div>
               ))}
             </div>
 
             {/* Two-column grid */}
             <div className="grid lg:grid-cols-3 gap-5">
-              {/* Left: Upload + AI Features */}
-              <div className="lg:col-span-2 space-y-5">
-                {/* Upload Manuscript */}
-                <div className="bg-card rounded-xl border border-border p-5">
-                  <h2
-                    className="text-base font-semibold mb-1"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    Upload New Manuscript
-                  </h2>
-                  <p className="text-xs text-muted-foreground mb-4 leading-relaxed max-w-lg">
-                    Collect other manuscripts for comprehensive audit as research
-                    integrity guidance to review and revise quality, and other aspects.
-                  </p>
 
-                  <div
-                    onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                    onDragLeave={() => setDragOver(false)}
-                    onDrop={(e) => { e.preventDefault(); setDragOver(false); }}
-                    className={`border-2 border-dashed rounded-xl px-6 py-8 flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
-                      dragOver
-                        ? "border-accent bg-accent/5"
-                        : "border-border hover:border-accent/40 hover:bg-muted/30"
-                    }`}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                      style={{ background: "#FDF8EE" }}
-                    >
-                      <Upload size={18} style={{ color: "#8B6914" }} />
+              {/* Left: Upload + How it works */}
+              <div className="lg:col-span-2 space-y-5">
+
+                {/* Upload Manuscript */}
+                <div className="bg-white rounded-xl border border-[#E5DDD0] p-5">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#FDF8EE" }}>
+                      <CloudUpload size={18} style={{ color: "#8B6914" }} />
                     </div>
-                    <p className="text-sm font-medium text-foreground mb-1">
-                      Drag & drop your file here
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      or click to browse from your device
-                    </p>
-                    <button
-                      className="px-5 py-2 rounded-lg text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-                      style={{ background: "linear-gradient(135deg, #8B6914, #B8890F)" }}
+                    <div>
+                      <h2 className="text-base font-semibold text-[#1B2B4B]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        Upload New Manuscript
+                      </h2>
+                      <p className="text-xs text-[#8B7355] leading-relaxed mt-0.5 max-w-md">
+                        Upload your manuscript to run a comprehensive audit on research integrity, publication quality, and submission readiness.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {/* Drop zone */}
+                    <div
+                      onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                      onDragLeave={() => setDragOver(false)}
+                      onDrop={(e) => { e.preventDefault(); setDragOver(false); }}
+                      className={`border-2 border-dashed rounded-xl px-6 py-8 flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
+                        dragOver ? "border-[#C49A2A] bg-[#FDF8EE]" : "border-[#D8C7B3] hover:border-[#C49A2A] hover:bg-[#FDF8EE]/50"
+                      }`}
                     >
-                      Choose File
-                    </button>
-                    <p className="text-[11px] text-muted-foreground mt-3">
-                      Supported: PDF, DOCX, LaTeX · Max 20 MB
-                    </p>
+                      <Upload size={28} className="mb-3" style={{ color: "#B8860B" }} />
+                      <p className="text-sm font-medium text-[#2C1810] mb-1">Drag & drop your file here</p>
+                      <p className="text-xs text-[#8B7355] mb-4">or</p>
+                      <button
+                        className="px-6 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: "#1B2B4B" }}
+                      >
+                        Choose File
+                      </button>
+                      <p className="text-[11px] text-[#8B7355] mt-3">Supports PDF, DOCX  |  Max size: 100MB</p>
+                    </div>
+
+                    {/* AI Features */}
+                    <div className="space-y-3">
+                      {AI_FEATURES.map((f) => (
+                        <div key={f.title} className="flex gap-3 items-start">
+                          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: "#FDF8EE" }}>
+                            <f.icon size={14} style={{ color: "#8B6914" }} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-[#1B2B4B] leading-tight">{f.title}</p>
+                            <p className="text-[11px] text-[#8B7355] mt-0.5 leading-relaxed">{f.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* AI Features */}
-                <div className="bg-card rounded-xl border border-border p-5">
-                  <h2
-                    className="text-base font-semibold mb-4"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    AI-Powered Checks
+                {/* How it works */}
+                <div className="bg-white rounded-xl border border-[#E5DDD0] p-5">
+                  <h2 className="text-base font-semibold text-[#1B2B4B] mb-5" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    How it works
                   </h2>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {AI_FEATURES.map((f) => (
-                      <div
-                        key={f.title}
-                        className="flex gap-3 p-3 rounded-lg border border-border hover:border-border/80 hover:shadow-sm transition-all cursor-default"
-                      >
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ background: f.bg }}
-                        >
-                          <f.icon size={15} style={{ color: f.color }} />
+                  <div className="grid grid-cols-5 gap-2">
+                    {HOW_IT_WORKS.map((step, i) => (
+                      <div key={step.title} className="flex flex-col items-center text-center relative">
+                        {i < HOW_IT_WORKS.length - 1 && (
+                          <div className="absolute top-4 left-[calc(50%+18px)] right-[-50%] hidden lg:flex items-center gap-1 z-0">
+                            {[0,1,2].map(d => <div key={d} className="w-1.5 h-1.5 rounded-full bg-[#D8C7B3]" />)}
+                          </div>
+                        )}
+                        <div className="relative z-10 w-8 h-8 rounded-full flex items-center justify-center mb-2 border-2 border-[#D8C7B3]" style={{ background: "#FDF8EE" }}>
+                          <step.icon size={14} style={{ color: "#8B6914" }} />
                         </div>
-                        <div>
-                          <p className="text-sm font-semibold text-foreground leading-tight">
-                            {f.title}
-                          </p>
-                          <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
-                            {f.desc}
-                          </p>
-                        </div>
+                        <p className="text-[11px] font-semibold text-[#1B2B4B] mb-1 leading-tight">{step.title}</p>
+                        <p className="text-[10px] text-[#8B7355] leading-relaxed">{step.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+
               </div>
 
               {/* Right: Recent Assessments + Announcements */}
               <div className="space-y-5">
+
                 {/* Recent Assessments */}
-                <div className="bg-card rounded-xl border border-border p-5">
+                <div className="bg-white rounded-xl border border-[#E5DDD0] p-5">
                   <div className="flex items-center justify-between mb-4">
-                    <h2
-                      className="text-base font-semibold"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
-                    >
+                    <h2 className="text-base font-semibold text-[#1B2B4B]" style={{ fontFamily: "'Playfair Display', serif" }}>
                       Recent Assessments
                     </h2>
-                    <button className="text-xs text-accent hover:underline font-medium flex items-center gap-0.5">
-                      View All <ChevronRight size={12} />
+                    <button className="text-xs font-semibold flex items-center gap-1" style={{ color: "#8B6914" }}>
+                      View all <ArrowRight size={11} />
                     </button>
                   </div>
                   <div className="space-y-3">
                     {RECENT_ASSESSMENTS.map((a) => (
-                      <div
-                        key={a.title}
-                        className="p-3 rounded-lg border border-border hover:bg-secondary/30 transition-colors cursor-pointer"
-                      >
-                        <div className="flex items-start justify-between gap-2 mb-1.5">
-                          <p className="text-sm font-medium text-foreground leading-snug flex-1 truncate">
-                            {a.title}
+                      <div key={a.title} className="flex items-center gap-3 p-3 rounded-lg border border-[#F0E8DD] hover:bg-[#FDF8EE] transition-colors cursor-pointer">
+                        <CircleScore score={a.score} color={a.scoreColor} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-[#1B2B4B] leading-snug truncate">{a.title}</p>
+                          <p className="text-[11px] mt-0.5 font-medium" style={{ color: a.statusColor }}>● {a.status}</p>
+                          <p className="text-[10px] text-[#8B7355] mt-0.5 flex items-center gap-1">
+                            <Clock size={9} /> {a.date}
                           </p>
-                          <span
-                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0"
-                            style={{
-                              background: a.statusBg,
-                              color: a.statusColor,
-                            }}
-                          >
-                            {a.status}
-                          </span>
-                        </div>
-                        {a.note && (
-                          <p className="text-[11px] text-muted-foreground mb-1">
-                            {a.note}
-                          </p>
-                        )}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                              <div
-                                className="h-full rounded-full"
-                                style={{
-                                  width: `${a.score}%`,
-                                  background:
-                                    a.score >= 85
-                                      ? "#2E7D32"
-                                      : a.score >= 70
-                                      ? "#8B6914"
-                                      : "#E65100",
-                                }}
-                              />
-                            </div>
-                            <span className="text-[10px] text-muted-foreground">
-                              {a.score}/100
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                            <Clock size={10} />
-                            {a.date}
-                          </span>
                         </div>
                       </div>
                     ))}
@@ -473,84 +417,31 @@ export default function App() {
                 </div>
 
                 {/* System Announcements */}
-                <div className="bg-card rounded-xl border border-border p-5">
-                  <h2
-                    className="text-base font-semibold mb-4"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    System Announcements
-                  </h2>
+                <div className="bg-white rounded-xl border border-[#E5DDD0] p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-semibold text-[#1B2B4B]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      System Announcements
+                    </h2>
+                    <button className="text-xs font-semibold flex items-center gap-1" style={{ color: "#8B6914" }}>
+                      View all <ArrowRight size={11} />
+                    </button>
+                  </div>
                   <div className="space-y-3">
                     {ANNOUNCEMENTS.map((a) => (
-                      <div
-                        key={a.title}
-                        className="flex gap-3 p-3 rounded-lg border border-border hover:bg-secondary/30 transition-colors cursor-pointer"
-                      >
-                        <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                          style={{
-                            background: a.type === "policy" ? "#FDF8EE" : "#EEF4FD",
-                          }}
-                        >
-                          <a.icon
-                            size={13}
-                            style={{
-                              color: a.type === "policy" ? "#8B6914" : "#1565C0",
-                            }}
-                          />
+                      <div key={a.title} className="flex gap-3 p-3 rounded-lg border border-[#F0E8DD] hover:bg-[#FDF8EE] transition-colors cursor-pointer">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: "#FDF8EE" }}>
+                          <a.icon size={14} style={{ color: "#8B6914" }} />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-foreground leading-tight">
-                            {a.title}
-                          </p>
-                          <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
-                            {a.desc}
-                          </p>
-                          <p className="text-[10px] text-muted-foreground/60 mt-1">
-                            {a.date}
-                          </p>
+                          <p className="text-sm font-semibold text-[#1B2B4B] leading-tight">{a.title}</p>
+                          <p className="text-[11px] text-[#8B7355] mt-0.5 leading-relaxed">{a.desc}</p>
+                          <p className="text-[10px] text-[#8B7355]/60 mt-1">{a.date}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* How it works */}
-            <div className="bg-card rounded-xl border border-border p-5">
-              <h2
-                className="text-base font-semibold mb-5"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                How it works
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                {HOW_IT_WORKS.map((step, i) => (
-                  <div key={step.step} className="relative flex flex-col items-center text-center">
-                    {i < HOW_IT_WORKS.length - 1 && (
-                      <div className="hidden lg:block absolute top-5 left-[calc(50%+20px)] right-[-50%] h-px bg-border z-0" />
-                    )}
-                    <div
-                      className="relative z-10 w-10 h-10 rounded-full flex items-center justify-center mb-3 border-2 border-accent/30"
-                      style={{ background: "#FDF8EE" }}
-                    >
-                      <step.icon size={17} style={{ color: "#8B6914" }} />
-                    </div>
-                    <span
-                      className="text-[10px] font-bold tracking-widest mb-1"
-                      style={{ color: "#C49A2A" }}
-                    >
-                      STEP {step.step}
-                    </span>
-                    <p className="text-sm font-semibold text-foreground mb-1">
-                      {step.title}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground leading-relaxed">
-                      {step.desc}
-                    </p>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
