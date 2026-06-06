@@ -27,9 +27,23 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    console.error("Axios Error:", error);
-    console.error("Response:", error?.response);
-    console.error("Request:", error?.request);
+    // Improve diagnostics for network / CORS / TLS failures
+    try {
+      console.error("Axios Error:", error?.toJSON ? error.toJSON() : error);
+    } catch (e) {
+      console.error("Axios Error (dump failed):", error);
+    }
+
+    if (!error?.response && error?.request) {
+      // Network-level failure: request was sent but no response received
+      console.error(
+        "Axios Network Error - no response received. Request:",
+        error.request,
+      );
+      const host = API_URL || "<unknown>";
+      const msg = `Network error: could not reach ${host}. Check backend, CORS, and TLS (certificate).`;
+      return Promise.reject(new Error(msg));
+    }
 
     const message =
       error?.response?.data?.message ||
