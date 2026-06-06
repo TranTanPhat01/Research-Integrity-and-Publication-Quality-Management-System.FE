@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import authService from '@/services/auth';
 import './login.css';
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <>
@@ -62,18 +70,59 @@ export default function LoginPage() {
 
                 <div className="field-group">
                   <label className="field-label">Email</label>
-                  <input className="field-input" type="email" placeholder="you@email.com" />
+                  <input
+                    className="field-input"
+                    type="email"
+                    placeholder="you@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
 
                 <div className="field-group">
                   <label className="field-label">Password</label>
-                  <input className="field-input" type="password" placeholder="Enter your password..." />
+                  <input
+                    className="field-input"
+                    type="password"
+                    placeholder="Enter your password..."
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                   <div className="field-footer">
                     <button className="forgot">Forgot password?</button>
                   </div>
                 </div>
 
-                <button className="btn-login">Sign In</button>
+                {error && <p className="error-text">{error}</p>}
+
+                <button
+                  className="btn-login"
+                  onClick={async () => {
+                    setError(null);
+                    setLoading(true);
+                    try {
+                      const res = await authService.login({ email, password });
+
+                      if (res?.success && res.data) {
+                        // store tokens
+                        if (typeof window !== 'undefined') {
+                          if (res.data.accessToken) localStorage.setItem('accessToken', res.data.accessToken);
+                          if (res.data.refreshToken) localStorage.setItem('refreshToken', res.data.refreshToken);
+                        }
+                        router.push('/home');
+                      } else {
+                        setError(res?.message || 'Login failed');
+                      }
+                    } catch (err: any) {
+                      setError(err?.message || 'Login error');
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </button>
               </div>
             ) : (
               <div className="form-content fade-in">

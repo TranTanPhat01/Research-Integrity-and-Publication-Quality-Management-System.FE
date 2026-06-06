@@ -21,6 +21,7 @@
     "async-function": "^1.0.0",
     "available-typed-arrays": "^1.0.7",
     "axe-core": "^4.12.0",
+    "axios": "^1.17.0",
     "axobject-query": "^4.1.0",
     "balanced-match": "^1.0.2",
     "baseline-browser-mapping": "^2.10.33",
