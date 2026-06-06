@@ -39,3 +39,9 @@ export default {
   AuthResponse: undefined as unknown as AuthResponse,
   CurrentUserResponse: undefined as unknown as CurrentUserResponse,
 };
+
+export type StoredAuth = {
+  accessToken: string;
+  refreshToken?: string;
+  user?: unknown;
+};

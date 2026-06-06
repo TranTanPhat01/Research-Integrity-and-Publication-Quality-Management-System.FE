@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import authService from "@/services/authService";
 import "./login.css";
+import { authStorage } from "@/lib/auth-storage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,6 +13,38 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (!email.trim() || !password.trim()) {
+        setError("Please enter email and password");
+        return;
+      }
+
+      const res = await authService.login({ email, password });
+
+      if (!res?.success || !res.data) {
+        setError(res?.message || "Login failed");
+        return;
+      }
+
+      authStorage.setAuth({
+        accessToken: res.data.accessToken ?? "",
+        refreshToken: res.data.refreshToken,
+        user: (res as any).data?.user ?? undefined,
+      });
+
+      router.push("/home");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Login error";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -111,36 +144,7 @@ export default function LoginPage() {
 
               <button
                 className="btn-login"
-                onClick={async () => {
-                  setError(null);
-                  setLoading(true);
-                  try {
-                    const res = await authService.login({ email, password });
-
-                    if (res?.success && res.data) {
-                      // store tokens
-                      if (typeof window !== "undefined") {
-                        if (res.data.accessToken)
-                          localStorage.setItem(
-                            "accessToken",
-                            res.data.accessToken,
-                          );
-                        if (res.data.refreshToken)
-                          localStorage.setItem(
-                            "refreshToken",
-                            res.data.refreshToken,
-                          );
-                      }
-                      router.push("/home");
-                    } else {
-                      setError(res?.message || "Login failed");
-                    }
-                  } catch (err: any) {
-                    setError(err?.message || "Login error");
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
+                onClick={handleLogin}
                 disabled={loading}
               >
                 {loading ? "Signing in..." : "Sign In"}
