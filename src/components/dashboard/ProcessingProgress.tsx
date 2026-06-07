@@ -1,4 +1,4 @@
-import type { PaperProcessingProgressResponse } from "@/services/paperService";
+import type { PaperProcessingProgressResponse } from "@/models/paper";
 import { CheckCircle, XCircle, Loader2, Clock, Circle } from "lucide-react";
 
 interface ProcessingProgressProps {
@@ -6,26 +6,31 @@ interface ProcessingProgressProps {
 }
 
 function StatusIcon({ status, isActive }: { status: string; isActive: boolean }) {
-  if (status === "Completed") {
+  const normalized = status.toUpperCase();
+
+  if (normalized === "COMPLETED") {
     return <CheckCircle size={20} className="text-green-600" />;
   }
-  if (status === "Failed") {
+  if (normalized === "FAILED") {
     return <XCircle size={20} className="text-red-500" />;
   }
-  if (isActive || status === "Processing") {
-    return <Loader2 size={20} className="animate-spin" style={{ color: "var(--theme-accent-secondary)" }} />;
+  if (isActive || normalized === "PROCESSING") {
+    return <Loader2 size={20} className="animate-spin" style={{ color: "var(--theme-accent-main)" }} />;
   }
   return <Circle size={20} className="text-theme-text-light opacity-50" />;
 }
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; color: string }> = {
-    Completed: { label: "COMPLETED", color: "#2E7D32" },
-    Failed: { label: "FAILED", color: "#C62828" },
-    Processing: { label: "PROCESSING", color: "var(--theme-accent-secondary)" },
-    Pending: { label: "PENDING", color: "var(--theme-text-light)" },
+    COMPLETED: { label: "COMPLETED", color: "#2E7D32" },
+    FAILED: { label: "FAILED", color: "#C62828" },
+    PROCESSING: { label: "PROCESSING", color: "var(--theme-accent-main)" },
+    WARNING: { label: "WARNING", color: "var(--theme-accent-main)" },
+    SKIPPED: { label: "SKIPPED", color: "var(--theme-text-light)" },
+    PENDING: { label: "PENDING", color: "var(--theme-text-light)" },
   };
-  const cfg = map[status] ?? { label: status.toUpperCase(), color: "var(--theme-text-light)" };
+  const normalized = status.toUpperCase();
+  const cfg = map[normalized] ?? { label: normalized, color: "var(--theme-text-light)" };
   return (
     <span className="text-xs font-bold" style={{ color: cfg.color }}>
       {cfg.label}
@@ -33,8 +38,31 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+function getOverallProgressColor(status: string) {
+  const normalized = status.toUpperCase();
+
+  if (normalized === "COMPLETED") return "#2E7D32";
+  if (normalized === "FAILED") return "#C62828";
+
+  return "var(--theme-accent-main)";
+}
+
+function getStepFill(status: string) {
+  switch (status.toUpperCase()) {
+    case "COMPLETED":
+    case "FAILED":
+    case "SKIPPED":
+    case "WARNING":
+      return 100;
+    case "PROCESSING":
+      return 50;
+    default:
+      return 0;
+  }
+}
+
 export default function ProcessingProgress({ progress }: ProcessingProgressProps) {
-  const overallPercent = Math.round(progress.progressPercent);
+  const overallPercent = Math.max(0, Math.min(100, Math.round(progress.progressPercent)));
 
   return (
     <div className="bg-theme-bg-card rounded-xl border border-theme-border-main p-5 space-y-4">
@@ -43,7 +71,7 @@ export default function ProcessingProgress({ progress }: ProcessingProgressProps
         <h3 className="text-base font-semibold text-theme-text-primary" style={{ fontFamily: "'Playfair Display', serif" }}>
           Processing Progress
         </h3>
-        <span className="text-sm font-bold" style={{ color: "var(--theme-accent-secondary)" }}>
+        <span className="text-sm font-bold" style={{ color: getOverallProgressColor(progress.overallStatus) }}>
           {overallPercent}%
         </span>
       </div>
@@ -52,7 +80,7 @@ export default function ProcessingProgress({ progress }: ProcessingProgressProps
       <div>
         <div className="flex items-center justify-between text-xs text-theme-text-light mb-1">
           <span>Upload</span>
-          <span className="font-semibold" style={{ color: "var(--theme-accent-secondary)" }}>
+          <span className="font-semibold" style={{ color: getOverallProgressColor(progress.overallStatus) }}>
             {progress.overallStatus?.toUpperCase()}
           </span>
         </div>
@@ -61,7 +89,7 @@ export default function ProcessingProgress({ progress }: ProcessingProgressProps
             className="h-full rounded-full transition-all duration-500"
             style={{
               width: `${overallPercent}%`,
-              background: "var(--theme-accent-secondary)",
+              background: getOverallProgressColor(progress.overallStatus),
             }}
           />
         </div>
@@ -72,6 +100,7 @@ export default function ProcessingProgress({ progress }: ProcessingProgressProps
         {progress.steps.map((step, idx) => {
           const isLast = idx === progress.steps.length - 1;
           const latestEvent = step.eventHistory?.[step.eventHistory.length - 1];
+          const stepFill = getStepFill(step.status);
           const timeLabel = step.startedAt
             ? new Date(step.startedAt).toLocaleString("en-US", {
                 month: "short",
@@ -104,13 +133,13 @@ export default function ProcessingProgress({ progress }: ProcessingProgressProps
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
-                      width: `${step.progressPercent}%`,
+                      width: `${stepFill}%`,
                       background:
-                        step.status === "Completed"
+                        step.status.toUpperCase() === "COMPLETED"
                           ? "#2E7D32"
-                          : step.status === "Failed"
+                          : step.status.toUpperCase() === "FAILED"
                           ? "#C62828"
-                          : "var(--theme-accent-secondary)",
+                          : "var(--theme-accent-main)",
                     }}
                   />
                 </div>

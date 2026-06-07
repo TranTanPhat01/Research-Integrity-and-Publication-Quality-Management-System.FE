@@ -52,19 +52,60 @@ function getStatusColor(status: string) {
   const normalized = status.toUpperCase();
 
   if (normalized === "COMPLETED") return "#2E7D32";
-  if (normalized === "FAILED") return "#B42318";
+  if (normalized === "FAILED") return "#C62828";
   if (normalized === "IN_PROGRESS" || normalized === "PROCESSING") {
-    return "var(--theme-accent-secondary)";
+    return "var(--theme-accent-main)";
+  }
+  if (normalized === "WARNING") {
+    return "var(--theme-accent-main)";
   }
   if (normalized === "SKIPPED") return "var(--theme-text-muted)";
 
   return "var(--theme-text-light)";
 }
 
+function getOverallProgressColor(status: string) {
+  const normalized = status.toUpperCase();
+
+  if (normalized === "COMPLETED") return "#2E7D32";
+  if (normalized === "FAILED") return "#C62828";
+
+  return "var(--theme-accent-main)";
+}
+
+function getStepFill(status: string) {
+  switch (status.toUpperCase()) {
+    case "COMPLETED":
+    case "FAILED":
+    case "SKIPPED":
+    case "WARNING":
+      return 100;
+    case "PROCESSING":
+    case "IN_PROGRESS":
+      return 50;
+    default:
+      return 0;
+  }
+}
+
 function isTrackerCreatingError(error: unknown) {
   const apiError = error as ApiError;
 
   return apiError?.status === 404 || apiError?.code === 404;
+}
+
+function shouldKeepPolling(progress: PaperProcessingProgressResponse | null) {
+  if (!progress) return true;
+
+  const normalizedOverallStatus = progress.overallStatus?.toUpperCase();
+  if (normalizedOverallStatus === "FAILED") return false;
+  if (normalizedOverallStatus === "PROCESSING") return true;
+  if (progress.progressPercent < 100) return true;
+
+  return progress.steps.some((step) => {
+    const normalized = step.status.toUpperCase();
+    return normalized === "PENDING" || normalized === "PROCESSING" || normalized === "IN_PROGRESS";
+  });
 }
 
 function StepIcon({ step }: { step: PaperProcessingProgressStepResponse }) {
@@ -99,6 +140,7 @@ function TimelineStep({
 }) {
   const statusColor = getStatusColor(step.status);
   const updatedAt = formatDate(step.lastUpdatedAt ?? step.completedAt ?? step.startedAt);
+  const fillPercent = getStepFill(step.status);
 
   return (
     <div className="relative flex gap-3 pb-4 last:pb-0">
@@ -133,7 +175,7 @@ function TimelineStep({
           <div
             className="h-full rounded-full transition-all"
             style={{
-              width: `${Math.max(0, Math.min(100, step.progressPercent))}%`,
+              width: `${fillPercent}%`,
               background: statusColor,
             }}
           />
@@ -168,6 +210,9 @@ export default function PaperProcessingTimeline({
   const [error, setError] = useState<string | null>(null);
   const [isTrackerCreating, setIsTrackerCreating] = useState(false);
   const steps = progress?.steps ?? [];
+  const progressPercent = progress
+    ? Math.max(0, Math.min(100, progress.progressPercent))
+    : 0;
 
   const loadProgress = useCallback(
     async (showLoading = false) => {
@@ -217,7 +262,7 @@ export default function PaperProcessingTimeline({
 
   useEffect(() => {
     if (!paperId) return;
-    if (!isTrackerCreating && progress?.overallStatus?.toUpperCase() !== "PROCESSING") {
+    if (!isTrackerCreating && !shouldKeepPolling(progress)) {
       return;
     }
 
@@ -226,7 +271,7 @@ export default function PaperProcessingTimeline({
     }, 3000);
 
     return () => window.clearInterval(intervalId);
-  }, [paperId, progress?.overallStatus, isTrackerCreating, loadProgress]);
+  }, [paperId, progress, isTrackerCreating, loadProgress]);
 
   return (
     <div className="bg-theme-bg-card rounded-xl border border-theme-border-main p-5">
@@ -283,8 +328,8 @@ export default function PaperProcessingTimeline({
               <div
                 className="h-full rounded-full transition-all"
                 style={{
-                  width: `${Math.max(0, Math.min(100, progress.progressPercent))}%`,
-                  background: getStatusColor(progress.overallStatus),
+                  width: `${progressPercent}%`,
+                  background: getOverallProgressColor(progress.overallStatus),
                 }}
               />
             </div>

@@ -1,9 +1,7 @@
 "use client";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { CloudUpload, Upload, ShieldCheck, BookOpen, Users, Target, Loader2 } from "lucide-react";
 import { paperService } from "@/services/paperService";
-import type { PaperProcessingProgressResponse } from "@/models/paper";
-import ProcessingProgress from "./ProcessingProgress";
 
 const AI_FEATURES = [
   { icon: ShieldCheck, title: "Integrity Audit", desc: "Check COPE, ethics, COI, citation, transparency and more." },
@@ -12,50 +10,33 @@ const AI_FEATURES = [
   { icon: Target, title: "Reduce Preventable Rejections", desc: "Identify issues early and improve your chance of success." },
 ];
 
-const POLL_INTERVAL_MS = 2000;
-const DONE_STATUSES = ["Completed", "Failed", "CompletedWithWarnings"];
+type UploadManuscriptProps = {
+  onUploadStart?: () => void;
+  onUploadSuccess?: (paperId: number) => void;
+  onUploadError?: (error: string) => void;
+};
 
-export default function UploadManuscript() {
+export default function UploadManuscript({
+  onUploadStart,
+  onUploadSuccess,
+  onUploadError,
+}: UploadManuscriptProps = {}) {
   const [dragOver, setDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [progress, setProgress] = useState<PaperProcessingProgressResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const stopPolling = useCallback(() => {
-    if (pollRef.current) {
-      clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-  }, []);
-
-  const startPolling = useCallback((paperId: number) => {
-    stopPolling();
-    pollRef.current = setInterval(async () => {
-      try {
-        const res = await paperService.getProcessingProgress(paperId);
-        const data = res.data;
-        setProgress(data);
-        if (DONE_STATUSES.includes(data.overallStatus)) {
-          stopPolling();
-        }
-      } catch {
-        // silently ignore poll errors
-      }
-    }, POLL_INTERVAL_MS);
-  }, [stopPolling]);
 
   const handleUpload = async (file: File) => {
     if (!file) return;
     if (file.size > 100 * 1024 * 1024) {
       setError("File size exceeds 100MB limit.");
+      onUploadError?.("File size exceeds 100MB limit.");
       return;
     }
 
     try {
       setError(null);
-      setProgress(null);
       setIsUploading(true);
+      onUploadStart?.();
 
       const res = await paperService.upload({
         file,
@@ -63,14 +44,19 @@ export default function UploadManuscript() {
       });
 
       const paperId = res.data?.paperId;
-      if (paperId) {
-        startPolling(paperId);
+      if (!paperId) {
+        throw new Error("Upload succeeded but no paper id was returned.");
       }
+
+      onUploadSuccess?.(paperId);
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        err instanceof Error
+          ? err.message
+          : (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
         "Upload failed. Please try again.";
       setError(msg);
+      onUploadError?.(msg);
     } finally {
       setIsUploading(false);
     }
@@ -167,9 +153,6 @@ export default function UploadManuscript() {
           </div>
         )}
       </div>
-
-      {/* Processing Progress */}
-      {progress && <ProcessingProgress progress={progress} />}
     </div>
   );
 }
