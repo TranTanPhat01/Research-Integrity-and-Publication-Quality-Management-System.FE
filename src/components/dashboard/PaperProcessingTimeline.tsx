@@ -122,11 +122,6 @@ function getHeaderStageLabel(progress: PaperProcessingProgressResponse) {
 
 function isVisibleTimelineStep(step: PaperProcessingProgressStepResponse) {
   const normalizedStage = (step.stage ?? "").toUpperCase();
-  const label = (step.label ?? "").toLowerCase();
-
-  // Hide completed/processing-completed steps and any markdown-related steps
-  if (normalizedStage.includes("MARKDOWN")) return false;
-  if (label.includes("markdown")) return false;
 
   return (
     normalizedStage !== "COMPLETED" &&

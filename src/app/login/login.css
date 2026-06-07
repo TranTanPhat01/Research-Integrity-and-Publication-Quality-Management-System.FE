@@ -4,10 +4,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   box-sizing: border-box;
 }
-.login-wrapper *, .login-wrapper *::before, .login-wrapper *::after {
+.login-wrapper *,
+.login-wrapper *::before,
+.login-wrapper *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -20,7 +22,7 @@
   border-radius: 14px;
   overflow: hidden;
   border: 0.5px solid #e2dbd0;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
 }
 .left {
   flex: 1.05;
@@ -41,7 +43,7 @@
   justify-content: center;
 }
 .eyebrow {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.18em;
   color: #a09080;
@@ -50,17 +52,24 @@
   font-weight: 400;
 }
 .hero-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 2rem;
   line-height: 1.28;
   color: #1e1a14;
   font-weight: 400;
   margin-bottom: 1.5rem;
 }
-.hero-title .accent { color: #b8793a; }
-.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 2rem; }
+.hero-title .accent {
+  color: #b8793a;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 2rem;
+}
 .badge {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 11px;
   padding: 3px 10px;
   border-radius: 20px;
@@ -74,7 +83,7 @@
   padding-left: 1.1rem;
 }
 .poem-line {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-style: italic;
   font-size: 13.5px;
   color: #7a6e5e;
@@ -82,7 +91,7 @@
   display: block;
 }
 .poem-attr {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 10px;
   letter-spacing: 0.12em;
   color: #a89e8e;
@@ -95,7 +104,7 @@
   border-bottom: 1px solid #ede6da;
 }
 .tab {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 14px;
   padding: 0.5rem 1.25rem 0.6rem;
   cursor: pointer;
@@ -110,22 +119,24 @@
   font-weight: 500;
 }
 .welcome-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 22px;
   font-weight: 400;
   color: #1e1a14;
   margin-bottom: 0.3rem;
 }
 .welcome-sub {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 13px;
   color: #a09080;
   font-style: italic;
   margin-bottom: 2rem;
 }
-.field-group { margin-bottom: 1.1rem; }
+.field-group {
+  margin-bottom: 1.1rem;
+}
 .field-label {
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.1em;
   color: #8a8070;
@@ -142,22 +153,26 @@
   border-radius: 8px;
   font-size: 14px;
   outline: none;
-  font-family: 'DM Sans', Arial, sans-serif;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: "DM Sans", Arial, sans-serif;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 .field-input:focus {
   border-color: #b8793a;
-  box-shadow: 0 0 0 3px rgba(184,121,58,0.1);
+  box-shadow: 0 0 0 3px rgba(184, 121, 58, 0.1);
   background: #fff;
 }
-.field-input::placeholder { color: #c4bab0; }
+.field-input::placeholder {
+  color: #c4bab0;
+}
 .field-footer {
   display: flex;
   justify-content: flex-end;
   margin-top: 0.4rem;
 }
 .forgot {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 12.5px;
   color: #b8793a;
   font-style: italic;
@@ -178,22 +193,25 @@
   margin-top: 1.1rem;
   letter-spacing: 0.08em;
   font-weight: 500;
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   transition: background 0.15s;
 }
-.btn-login:hover { background: #2e2a20; }
+.btn-login:hover {
+  background: #2e2a20;
+}
 .or-divider {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-top: 1.4rem;
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   font-size: 10px;
   color: #c0b8aa;
   letter-spacing: 0.14em;
 }
-.or-divider::before, .or-divider::after {
-  content: '';
+.or-divider::before,
+.or-divider::after {
+  content: "";
   flex: 1;
   height: 0.5px;
   background: #e8e2d8;
@@ -212,11 +230,16 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'DM Sans', Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   transition: background 0.15s;
 }
-.social-btn:hover { background: #faf6f0; }
-.social-btn i { font-size: 17px; color: #6a6050; }
+.social-btn:hover {
+  background: #faf6f0;
+}
+.social-btn i {
+  font-size: 17px;
+  color: #6a6050;
+}
 
 .fade-in {
   animation: fadeIn 0.3s ease-in-out;
