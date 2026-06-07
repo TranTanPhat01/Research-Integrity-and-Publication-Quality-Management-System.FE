@@ -8,4 +8,11 @@ export class ApiEndpoints {
     Logout: "/api/auth/logout",
     Me: "/api/auth/me",
   };
+  static readonly Papers = {
+    Upload: "/api/papers/upload",
+    List: "/api/papers",
+    Detail: (id: number) => `/api/papers/${id}`,
+    ProcessingProgress: (paperId: number | string) =>
+      `/api/papers/${paperId}/processing-progress`,
+  };
 }

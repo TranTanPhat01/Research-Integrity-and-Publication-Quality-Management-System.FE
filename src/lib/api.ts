@@ -10,6 +10,11 @@ export const api = {
   post: <T>(url: string, data?: unknown): Promise<BaseResponse<T>> =>
     axiosClient.post(url, data),
 
+  postForm: <T>(url: string, data?: FormData): Promise<BaseResponse<T>> =>
+    axiosClient.post(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
+
   put: <T>(url: string, data?: unknown): Promise<BaseResponse<T>> =>
     axiosClient.put(url, data),
 

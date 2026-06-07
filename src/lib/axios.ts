@@ -49,8 +49,14 @@ axiosClient.interceptors.response.use(
       error?.response?.data?.message ||
       error?.message ||
       "Something went wrong";
+    const apiError = new Error(message) as Error & {
+      status?: number;
+      code?: number;
+    };
+    apiError.status = error?.response?.status;
+    apiError.code = error?.response?.data?.code;
 
-    return Promise.reject(new Error(message));
+    return Promise.reject(apiError);
   },
 );
 
