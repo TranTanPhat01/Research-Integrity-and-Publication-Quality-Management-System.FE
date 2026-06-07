@@ -47,18 +47,16 @@ function formatDate(value?: string | null) {
     minute: "2-digit",
   }).format(date);
 }
-
 function getStatusColor(status: string) {
   const normalized = status.toUpperCase();
 
-  if (normalized === "COMPLETED") return "#2E7D32";
+  if (normalized === "COMPLETED")
+    return "color-mix(in srgb, var(--theme-accent-main) 70%, transparent)";
   if (normalized === "FAILED") return "#C62828";
-  if (normalized === "IN_PROGRESS" || normalized === "PROCESSING") {
-    return "var(--theme-accent-main)";
-  }
-  if (normalized === "WARNING") {
-    return "var(--theme-accent-main)";
-  }
+  if (normalized === "IN_PROGRESS" || normalized === "PROCESSING")
+    return "color-mix(in srgb, var(--theme-accent-main) 70%, transparent)";
+  if (normalized === "WARNING")
+    return "color-mix(in srgb, var(--theme-accent-main) 70%, transparent)";
   if (normalized === "SKIPPED") return "var(--theme-text-muted)";
 
   return "var(--theme-text-light)";
@@ -67,12 +65,12 @@ function getStatusColor(status: string) {
 function getOverallProgressColor(status: string) {
   const normalized = status.toUpperCase();
 
-  if (normalized === "COMPLETED") return "#2E7D32";
+  if (normalized === "COMPLETED")
+    return "color-mix(in srgb, var(--theme-accent-main) 70%, transparent)";
   if (normalized === "FAILED") return "#C62828";
 
-  return "var(--theme-accent-main)";
+  return "color-mix(in srgb, var(--theme-accent-main) 70%, transparent)";
 }
-
 function getStepFill(status: string) {
   switch (status.toUpperCase()) {
     case "COMPLETED":
@@ -104,8 +102,30 @@ function shouldKeepPolling(progress: PaperProcessingProgressResponse | null) {
 
   return progress.steps.some((step) => {
     const normalized = step.status.toUpperCase();
-    return normalized === "PENDING" || normalized === "PROCESSING" || normalized === "IN_PROGRESS";
+    return (
+      normalized === "PENDING" ||
+      normalized === "PROCESSING" ||
+      normalized === "IN_PROGRESS"
+    );
   });
+}
+
+function getHeaderStageLabel(progress: PaperProcessingProgressResponse) {
+  if (progress.overallStatus?.toUpperCase() === "COMPLETED") {
+    return "Progress";
+  }
+
+  return progress.currentStage
+    ? formatStage(progress.currentStage)
+    : progress.overallStatus.replaceAll("_", " ");
+}
+
+function isVisibleTimelineStep(step: PaperProcessingProgressStepResponse) {
+  const normalizedStage = step.stage.toUpperCase();
+  return (
+    normalizedStage !== "COMPLETED" &&
+    normalizedStage !== "PROCESSING_COMPLETED"
+  );
 }
 
 function StepIcon({ step }: { step: PaperProcessingProgressStepResponse }) {
@@ -120,7 +140,11 @@ function StepIcon({ step }: { step: PaperProcessingProgressStepResponse }) {
     return <AlertTriangle size={17} style={{ color }} />;
   }
 
-  if (step.isActive || normalized === "IN_PROGRESS" || normalized === "PROCESSING") {
+  if (
+    step.isActive ||
+    normalized === "IN_PROGRESS" ||
+    normalized === "PROCESSING"
+  ) {
     return <Loader2 size={17} className="animate-spin" style={{ color }} />;
   }
 
@@ -139,7 +163,9 @@ function TimelineStep({
   isLast: boolean;
 }) {
   const statusColor = getStatusColor(step.status);
-  const updatedAt = formatDate(step.lastUpdatedAt ?? step.completedAt ?? step.startedAt);
+  const updatedAt = formatDate(
+    step.lastUpdatedAt ?? step.completedAt ?? step.startedAt,
+  );
   const fillPercent = getStepFill(step.status);
 
   return (
@@ -191,7 +217,10 @@ function TimelineStep({
         </div>
 
         {step.errorMessage && (
-          <p className="mt-2 text-[11px] leading-relaxed" style={{ color: "#B42318" }}>
+          <p
+            className="mt-2 text-[11px] leading-relaxed"
+            style={{ color: "#B42318" }}
+          >
             {step.errorMessage}
           </p>
         )}
@@ -209,7 +238,7 @@ export default function PaperProcessingTimeline({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isTrackerCreating, setIsTrackerCreating] = useState(false);
-  const steps = progress?.steps ?? [];
+  const steps = progress?.steps.filter(isVisibleTimelineStep) ?? [];
   const progressPercent = progress
     ? Math.max(0, Math.min(100, progress.progressPercent))
     : 0;
@@ -316,9 +345,7 @@ export default function PaperProcessingTimeline({
           <div className="mb-4">
             <div className="flex items-center justify-between gap-3 text-xs mb-2">
               <span className="font-semibold text-theme-text-secondary">
-                {progress.currentStage
-                  ? formatStage(progress.currentStage)
-                  : progress.overallStatus.replaceAll("_", " ")}
+                {getHeaderStageLabel(progress)}
               </span>
               <span style={{ color: getStatusColor(progress.currentStatus) }}>
                 {progress.currentStatus.replaceAll("_", " ")}
@@ -334,7 +361,10 @@ export default function PaperProcessingTimeline({
               />
             </div>
             {progress.lastError && (
-              <p className="mt-2 text-[11px] leading-relaxed" style={{ color: "#B42318" }}>
+              <p
+                className="mt-2 text-[11px] leading-relaxed"
+                style={{ color: "#B42318" }}
+              >
                 {progress.lastError}
               </p>
             )}
